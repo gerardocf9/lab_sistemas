@@ -1,0 +1,1 @@
+link /SUBSYSTEM:CONSOLE /RELEASE /VERSION:4.0 "/LIBPATH:\Masm32\Lib" "C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.obj" "/OUT:C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.exe"

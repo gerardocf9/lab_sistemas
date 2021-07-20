@@ -1,0 +1,46 @@
+\Masm32\Bin\ML /c /coff /Cp /nologo /I"\Masm32\Include" "C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.asm"
+
+ Assembling: C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.asm
+
+***********
+ASCII build
+***********
+
+
+Make finished. 0 error(s) occured.
+
+
+
+
+
+\Masm32\Bin\Link @"C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\link.war"
+
+Microsoft (R) Incremental Linker Version 5.12.8078
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/SUBSYSTEM:CONSOLE /RELEASE /VERSION:4.0 "/LIBPATH:\Masm32\Lib" "C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.obj" "/OUT:C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.exe" 
+
+Make finished. 0 error(s) occured.
+
+
+
+
+
+
+\Masm32\Bin\ML /c /coff /Cp /nologo /I"\Masm32\Include" "C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.asm"
+
+ Assembling: C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.asm
+
+***********
+ASCII build
+***********
+
+
+\Masm32\Bin\Link @"C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\link.war"
+
+Microsoft (R) Incremental Linker Version 5.12.8078
+Copyright (C) Microsoft Corp 1992-1998. All rights reserved.
+
+/SUBSYSTEM:CONSOLE /RELEASE /VERSION:4.0 "/LIBPATH:\Masm32\Lib" "C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.obj" "/OUT:C:\Documents and Settings\gerardoc\Escritorio\practica2\actividad4\act4.exe" 
+
+Make finished. 0 error(s) occured.

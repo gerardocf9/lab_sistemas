@@ -1,0 +1,77 @@
+\documentclass[10pt]{article}
+
+%si colocas esto se ve en times new roman, pero compilas es con xelatex
+%\usepackage{fontspec}
+%\setmainfont{Times New Roman}
+
+\usepackage{tocbibind}
+
+\usepackage[a4paper]{geometry}
+\geometry{top=2.54cm, bottom=2.54cm, left=2.54cm, right=2.54cm}
+\usepackage[spanish]{babel}
+
+\usepackage{float}
+\usepackage{graphicx} % graficos
+\graphicspath{ {./images/} }
+\usepackage{setspace}%interlineado agrega:
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyvrb}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+% \doublespacing \onehalfspace \singlespace \spacing{x}
+\spacing{1.5}
+\pagestyle{headings}
+
+\usepackage[backend=biber, autocite=inline, labeldateparts=true, maxcitenames=1,style = apa]{biblatex}
+\bibliography{referencias}
+
+\usepackage{csquotes}
+\usepackage[bookmarks = true, colorlinks=true, linkcolor = black, citecolor = black, menucolor = black, urlcolor = black]{hyperref}
+
+\newcommand{\comillas}[1]{``#1"}
+
+\begin{document}
+\renewcommand{\listtablename}{Índice de Tablas}
+\pagenumbering{roman}
+
+	\include{portada}
+
+	\newpage
+	\tableofcontents
+	\newpage
+	\listoffigures
+	%\newpage
+	%\listoftables
+
+
+    %\newpage
+    \pagenumbering{arabic}
+	\include{practica3/practica3b}
+	\nocite{*}
+	\printbibliography[title={\centering{Referencias Bibliográficas}}]
+
+\end{document}

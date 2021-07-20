@@ -1,0 +1,8 @@
+4.1
+
+4.2  ExitProcess PROTO STDCALL :DWORD
+
+4.3
+MessageBoxA PROTO STDCALL :DWORD,:DWORD,:DWORD,:DWORD
+IFNDEF __UNICODE__
+  MessageBox equ <MessageBoxA>
