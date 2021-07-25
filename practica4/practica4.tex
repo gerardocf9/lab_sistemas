@@ -4,7 +4,7 @@
 
 \section{Programa DOS}
 
-El codigo comentado se adjunta en el archivo (dos/lectura.asm)
+El código comentado se adjunta en el archivo (dos/lectura.asm)
 %\lstinputlisting[language={[x86masm]Assembler}]{practica4/dos/lectura.asm}
 
 
@@ -12,14 +12,14 @@ El codigo comentado se adjunta en el archivo (dos/lectura.asm)
 
 \section{Programa consola}
 
-El codigo comentado se adjunta en el archivo (consola/lectura.asm)\\
+El código comentado se adjunta en el archivo (consola/lectura.asm)\\
 
 
 
-inicialmente es directivas e inclusión de librerias, luego viene el prototipo
+inicialmente es directivas e inclusión de librerías, luego viene el prototipo
 de funciones y el macro que permiten el controlar la entrada y salida de datos.
 Cabe resaltar que se utilizo como modelo la practica 2, posteriormente,
-vienen los segmentos de data y codigo:\\
+vienen los segmentos de data y código:\\
 
 
 En el segmento de data inicializada \comillas{\textbf{.DATA}} se encuentran:
@@ -54,25 +54,25 @@ En el segmento de data sin inicializar \comillas{\textbf{.DATA?}} se encuentran:
 
 \vspace{0.5cm}
 
-Posteriormente, comienza el codigo que basicamente es ejecutar \comillas{syscall}
-a traves de la directiva \comillas{INVOKE}.
+Posteriormente, comienza el código que básicamente es ejecutar \comillas{syscall}
+a través de la directiva \comillas{INVOKE}.
 
 
 Primero se pide por consola y se lee por la misma el nombre o path de la fila
 que se abrirá. Una vez recibido se usa la api de windows con \comillas{CreateFile} para
-abrir la fila \Cite{MicrosoftCreateFileA}, este devuelve la direccion en \comillas{eax}
+abrir la fila \Cite{MicrosoftCreateFileA}, este devuelve la dirección en \comillas{eax}
 por lo tanto se mueve a hfile. Luego, se utiliza la api nuevamente con \comillas{GetFileSize}
 \Cite{Windowsgetsize} y se mueve el valor devuelto de \comillas{eax} a
 \comillas{FileSize}, se incrementa el valor de \comillas{eax} para al pedir
-memoria dinamicamente, necesario si la fila es muy grande, poder agregar el
-caracter de terminacion y usar de forma segura la funcion de escritura.
+memoria dinámicamente, necesario si la fila es muy grande, poder agregar el
+carácter de terminación y usar de forma segura la función de escritura.
 
 
-Se pide la memoria dinamica con la api \comillas{GlobalAlloc} \Cite{GlobalAlloc},
+Se pide la memoria dinámica con la api \comillas{GlobalAlloc} \Cite{GlobalAlloc},
 se guarda en \comillas{hMem}, se le da el valor del tamaño de la fila de nuevo a
 \comillas{eax} para poder usarlo como puntero y darle el valor \comillas{0}
-(caracter de terminación) a \comillas{hMem} (espacio para el contenido de la
-fila + caracter terminación).
+(carácter de terminación) a \comillas{hMem} (espacio para el contenido de la
+fila + carácter terminación).
 
 
 Finalmente se lee el contenido con la función de la api ReadFile
@@ -93,5 +93,5 @@ correctamente.
 
 \section{Programa ventana}
 
-El codigo comentado se adjunta en el archivo (ventana/lectura.asm)
+El código comentado se adjunta en el archivo (ventana/lectura.asm)
 %\lstinputlisting[language={[x86masm]Assembler}]{practica4/ventana/lectura.asm}
