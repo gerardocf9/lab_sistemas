@@ -87,11 +87,47 @@ El programa termina con \comillas{Invoke ExitProcess} para terminar la ejecució
 correctamente.
 
 
-%\lstinputlisting[language={[x86masm]Assembler}]{practica4/consola/lectura.asm}
 
 
 
 \section{Programa ventana}
 
-El código comentado se adjunta en el archivo (ventana/lectura.asm)
-%\lstinputlisting[language={[x86masm]Assembler}]{practica4/ventana/lectura.asm}
+El código comentado se adjunta en el archivo
+(ventana/DIALOG.asm y ventana/recursos.rc)\\
+
+
+Para este programa se utilizo como base los tutoriales de \comillas{Iczelion}
+\Cite{Iczelion}
+mas especificamente el 11-1, ya que en la carpeta 11-3 estaba practicamente el
+codigo hecho y se quería intentar hacer a cuenta propia.
+
+
+Esta estructura da acceso a una ventana principal con un submenu superior, desde
+el cual se puede cerrar el programa y se puede abrir una ventana emergente con un
+cuadro de texto y 2 botones. Aqui es en donde se basaron todas las modificaciones.
+
+
+Para el funcionamiento del codigo, se incluyo la libreria \comillas{masm32} y se
+declararon variables adicionales en la sección \comillas{.data?}
+
+
+\begin{itemize}
+    \item \comillas{inbuf} buffer para la lectura de datos.
+
+    \item \comillas{hfile} \comillas{puntero} a la dirección de la fila que se
+        leerá.
+
+    \item \comillas{FileSize} espacio para el tamaño, en bytes, del fichero.
+
+    \item \comillas{hMem} \comillas{puntero} a la memoria creada con el contenido
+        del fichero.
+
+    \item \comillas{BytesRead} cantidad de bytes que se leyeron.
+
+\end{itemize}
+
+
+
+Cabe resaltar que el programa cuenta de estructuras que no se modificaron ya que
+parecian apropiadas, estas son constantes y el nombre de las ventanas. El segmento
+ de codigo
