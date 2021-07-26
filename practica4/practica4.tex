@@ -98,16 +98,16 @@ El código comentado se adjunta en el archivo
 
 Para este programa se utilizo como base los tutoriales de \comillas{Iczelion}
 \Cite{Iczelion}
-mas especificamente el 11-1, ya que en la carpeta 11-3 estaba practicamente el
-codigo hecho y se quería intentar hacer a cuenta propia.
+mas específicamente el 11-1, ya que en la carpeta 11-3 estaba prácticamente el
+código hecho y se quería intentar hacer a cuenta propia.
 
 
 Esta estructura da acceso a una ventana principal con un submenu superior, desde
 el cual se puede cerrar el programa y se puede abrir una ventana emergente con un
-cuadro de texto y 2 botones. Aqui es en donde se basaron todas las modificaciones.
+cuadro de texto y 2 botones. Aquí es en donde se basaron todas las modificaciones.
 
 
-Para el funcionamiento del codigo, se incluyo la libreria \comillas{masm32} y se
+Para el funcionamiento del código, se incluyo la librería \comillas{masm32} y se
 declararon variables adicionales en la sección \comillas{.data?}
 
 
@@ -129,5 +129,125 @@ declararon variables adicionales en la sección \comillas{.data?}
 
 
 Cabe resaltar que el programa cuenta de estructuras que no se modificaron ya que
-parecian apropiadas, estas son constantes y el nombre de las ventanas. El segmento
- de codigo
+parecían apropiadas, estas son constantes y el nombre de las ventanas. El segmento
+ de código hace uso de 4 invoke, el primero es para poder manejar los módulos
+ \comillas{GetModuleHandle}, el segundo \comillas{GetCommandLine} permite hacer
+ uso de una \comillas{CMD}, el tercero, \comillas{WinMain} le da el control del
+ programa a un subproceso descrito posteriormente y el final para cerrar los procesos.
+
+
+
+\comillas{Invoke WinMain} le da el control del programa a un subproceso y le pasa
+como parámetro las variables hInstance, NULL, CommandLine, SW\_SHOWDEFAULT, con
+las cuales se creara la ventana main, estas se inicializan y posteriormente se
+crea un objeto, struct, y a el se le asignan los, valores, variables y procedimientos
+requeridos, el tamaño de la ventana, el color, los nombres de los objetos gráficos
+estilo de cursor entre otros, el mas importante es
+\comillas{mov   wc.lpfnWndProc, OFFSET WndProc}, aquí se le da a la clase la
+dirección de otro subproceso definido y explicado posteriormente, en el cual se
+hará todo el proceso de búsqueda, lectura y escritura del fichero. \\
+Después de estas definiciones se usan las directivas \comillas{INVOKE ShowWindow}
+y \comillas{INVOKE UpdateWindow} que crean una ventana y la actualizan con toda
+la información proveída desde la clase.\\
+Posteriormente, se entra en un ciclo while true el cual hace la función de
+una especie de \comillas{framework} ya que mantiene el programa en ejecución a la
+espera de que un evento suceda y sea necesario realizar alguna acción, en este caso
+\comillas{GetMessage} se encarga de verificar si ocurre algún evento,
+\comillas{eax} guarda cualquier posible cambio y si es 0 indica la finalización
+del programa.
+
+
+\comillas{WindProc} es otro proceso construido y es llamado automáticamente por la
+clase (ya que se le asigno su dirección, y es llamado cuando es requerido) y, básicamente,
+se encarga de revisar si algún evento sucedió, y si sucedió enviar los mensajes con
+\comillas{PostQuitMessage} si se destruyo la ventana, para finalizar el proceso
+mencionado anteriormente ( asigna el valor 0 a \comillas{eax}), cuando este no es el
+caso, se trata de una serie de condicionales anidados para ir revisando todos los
+posibles eventos y tomar las medidas necesarias en cada caso. Estos son:
+
+\begin{itemize}
+    \item  Si \comillas{uMsg$==$WM\_DESTROY}, condición de terminación, se envía el
+        mensaje 0 (null) en \comillas{eax} al \comillas{framework} (\comillas{.while true})
+        para terminar su ejecución.
+
+    \item Si no y \comillas{uMsg$==$WM\_COMMAND}, hace la comparación de la entrada
+        al submenu.
+
+        \begin{itemize}
+            \item Si \comillas{ax$==$IDM\_ABOUT} crea la nueva ventana y le da la
+                 dirección a otro proceso definido posteriormente donde se realizan
+                todo lo relacionado a el
+                el \comillas{InputBox} y los botones que permiten ingresar el
+                nombre del fichero. Cabe resaltar que \comillas{IDM\_ABOUT} no
+                es mas que el identificador de la ventana emergente creada que
+                contendrá todos los elementos anteriormente nombrados, este
+                nombre puede ser cambiado, requeriría modificar aquí y en
+                el archivo \comillas{recursos.rc} ya que aquí se define el
+                \comillas{InputBox}.
+
+            \item Si no, la única otra opción disponible implica cerrar, así que
+                llama al proceso \comillas{DestroyWindow}
+
+        \end{itemize}
+
+    \item En el caso que no se haya cumplido nada de esto, llama a
+        \comillas{DefWindowProc} para definir la ventana y regresa el control.
+\end{itemize}
+
+
+
+El proceso \comillas{DlgProc} es igualmente una secuencia de condicionales anidados:
+
+\begin{itemize}
+    \item \comillas{.if iMsg$==$WM\_INITDIALOG} se inicializa la ventana de diálogos
+        y se centra la atención en \comillas{eax}.
+        \comillas{inputbox}
+
+    \item \comillas{.elseif iMsg$==$WM\_CLOSE} el mensaje es para cerrar la pestaña.
+        se clickeo el salir de la ventana.
+
+    \item \comillas{.elseif iMsg$==$WM\_COMMAND} Ha ocurrido algún evento dentro de
+    la ventana, particularmente se trabajan los botones:
+        \begin{itemize}
+            \item \comillas{.if eax$==$IDC\_EXIT} se presiono el botón \comillas{salir}
+                 y se cierra la ventana, mandando un mensaje de terminación con
+                 \comillas{SendMessage}.
+
+             \item \comillas{.elseif eax$==$IDC\_BUTTON} se presiono el botón para
+                 la lectura del texto. entonces se hace:
+                 \begin{itemize}
+                    \item \comillas{GetDlgItemText} para obtener el texto en el
+                         \comillas{InputBox} y guardarlo en \comillas{inbuf}.
+
+                    \item \comillas{CreateFile} para abrir la fila especificada
+                         en \comillas{inbuf}.
+
+                    \item \comillas{GetFileSize} tomar el tamaño de la fila.
+
+                    \item \comillas{GlobalAlloc} reservar memoria dinámica. Se
+                        hacen las mismas consideraciones que en el programa consola.
+
+                    \item \comillas{ReadFile} lee la fila.
+
+                    \item \comillas{CloseHandle} cierra la fila.
+
+                    \item \comillas{StdOut} escribe el contenido en \comillas{hMem}.
+
+                    \item \comillas{MessageBox} Manda una ventana emergente con
+                        el contenido del fichero.
+
+                    \item \comillas{GlobalFree} libera la memoria pedida.
+
+                 \end{itemize}
+
+        \end{itemize}
+
+    \item Si no se ejecuta ninguna de estas opciones, se devuelve \comillas{False}
+        en \comillas{eax}.
+
+\end{itemize}
+
+Si algo de eso ocurrió, devuelve \comillas{True} en \comillas{eax}.
+
+
+Con ese ultimo procedimiento finaliza todo el código.
