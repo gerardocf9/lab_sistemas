@@ -1,26 +1,56 @@
-
 %\documentclass[10pt]{article}
-
 
 \section{Programa DOS}
 
 El código comentado se adjunta en el archivo (dos/lectura.asm)
-%\lstinputlisting[language={[x86masm]Assembler}]{practica4/dos/lectura.asm}
+
+Las llamadas a sistema en \textbf{MS-DOS} funcionan mediante la interrupción
+\verb|INT 21h| la cual recibe como parámetro el código de la función en el
+registro \verb|AX|. Para la elaboración del programa se utilizaron 4 llamadas a
+sistema, una para abrir el archivo, otra para leer, una para cerrar y
+finalmente una para imprimir en pantalla.
+
+La primera función fue \verb|716Ch| la cual sirve para crear o abrir un
+archivo, toma 4 parámetros adicionales al código de función. En \verb|BX|
+se pasa el tipo de acceso, en este caso se tomo 0 porque se va leer el archivo.
+En \verb|CX| se pasan atributos como no se hará nada especial se paso 0 que significa
+normal.  En \verb|DX| se pasa la acción a tomar, se pasa 1 porque se desea abrir
+el archivo. Finalmente en \verb|DS:SI| se pasa un puntero al nombre del
+archivo. La función retorna en AX el handle del archivo.
+
+La segunda función que se utiliza es \verb|3Fh| la cual lee un arreglo de
+bytes de un archivo o dispositivo. Toma tres parámetros, en \verb|BX|
+se pasa el handle del archivo, en \verb|CX| el numero máximo de bytes a leer
+y finalmente en \verb|DS:DX| la dirección del buffer a escribir. En este
+programa se toman 4kb de salida, mas de ahí el programa truncara, pero
+es mas que suficiente para un programa que muestre en pantalla un archivo.
+El programa retorna la cantidad de bytes leídos del archivo y se guarda en una
+variable.
+
+La tercera función que se utiliza es \verb|3Eh| la cual cierra un archivo.
+Solo toma un parámetro en \verb|BX| el handle del archivo a cerrar.
+
+Finalmente la ultima función utilizada fue \verb|40h| la cual permite
+escribir un arreglo de bytes en un archivo o dispositivo. Toma tres parámetros
+en \verb|BX| el handle del archivo o dispositivo a escribir, en este
+caso pasamos 1 porque es el handle de la salida estándar. En \verb|CX|
+se pasa la cantidad de bytes a escribir que es igual a la cantidad de
+bytes leídos del archivo. Finalmente pasamos en \verb|DS:DX| el buffer
+que contiene la información leída con anterioridad.
 
 
-
+\lstinputlisting[language={[x86masm]Assembler}]{practica4/dos/lectura.asm}
 
 \section{Programa consola}
 
-El código comentado se adjunta en el archivo (consola/lectura.asm)\\
+El código comentado se adjunta en el archivo (consola/lectura.asm)
 
+\lstinputlisting[language={[x86masm]Assembler}]{practica4/consola/lectura.asm}
 
-
-inicialmente es directivas e inclusión de librerías, luego viene el prototipo
+Inicialmente es directivas e inclusión de librerías, luego viene el prototipo
 de funciones y el macro que permiten el controlar la entrada y salida de datos.
 Cabe resaltar que se utilizo como modelo la practica 2, posteriormente,
-vienen los segmentos de data y código:\\
-
+vienen los segmentos de data y código:
 
 En el segmento de data inicializada \comillas{\textbf{.DATA}} se encuentran:
 
@@ -86,20 +116,16 @@ imprime un salto de linea y se manda a leer esperando por un enter para finaliza
 El programa termina con \comillas{Invoke ExitProcess} para terminar la ejecución
 correctamente.
 
-
-
-
-
 \section{Programa ventana}
 
-El código comentado se adjunta en el archivo
-(ventana/DIALOG.asm y ventana/recursos.rc)\\
+El código comentado se adjunta en el archivo (ventana/DIALOG.asm y ventana/recursos.rc)
+
+\lstinputlisting[language={[x86masm]Assembler}]{practica4/ventana/DIALOG.asm}
 
 
 Para este programa se utilizo como base los tutoriales de \comillas{Iczelion}
-\Cite{Iczelion}
-mas específicamente el 11-1, ya que en la carpeta 11-3 estaba prácticamente el
-código hecho y se quería intentar hacer a cuenta propia.
+\Cite{Iczelion} mas específicamente el 11-1, ya que en la carpeta 11-3 estaba
+prácticamente el código hecho y se quería intentar hacer a cuenta propia.
 
 
 Esta estructura da acceso a una ventana principal con un submenu superior, desde
@@ -248,6 +274,5 @@ El proceso \comillas{DlgProc} es igualmente una secuencia de condicionales anida
 \end{itemize}
 
 Si algo de eso ocurrió, devuelve \comillas{True} en \comillas{eax}.
-
 
 Con ese ultimo procedimiento finaliza todo el código.
