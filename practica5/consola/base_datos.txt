@@ -1,0 +1,2 @@
+12345678,Pedro José Pérez Rodríguez,100,80,90 
+23456789,María Josefina López,90,100,80 
