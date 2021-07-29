@@ -55,7 +55,7 @@ Aux_string db 512 dup(0) ;para el nuevo campo de la bbdd
 
 
 
-new_file DB "Base_datos_nueva.txt",0AH,0DH,0
+new_file DB "BBDD.txt",0
 
 
 .DATA? 
@@ -99,8 +99,7 @@ Start:
 	; can safely display the text in memory.
 	;finalmente se lee la fila
 	invoke  ReadFile,hFile,hMem,FileSize,ADDR BytesRead,0
-	;se   cierra la fila
-	invoke  CloseHandle,hFile
+
 	;se escribe la fila
 	invoke  StdOut,hMem
 	Print_Text CRLF ;salto de linea
@@ -113,10 +112,10 @@ Start:
 	mov     hFileWrite,eax
  	  ;invoke CreateFile,lpName,GENERIC_WRITE,NULL,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL
 
-	invoke WriteFile,hFileWrite,hFile,FileSize,ADDR bytewr,NULL
+	invoke WriteFile,hFileWrite,hMem,FileSize,ADDR bytewr,NULL
 	;cantidad de bytes se consigue restando 2 direcciones de memoria xD
 
-	invoke  CloseHandle,hFileWrite
+	
 
 
 	;************************************************************************
@@ -195,12 +194,17 @@ Start:
 	Print_Text  Aux_string
 	Print_Text CRLF ;salto de linea
 
-	
+	invoke WriteFile,hFileWrite,offset Aux_string,200,ADDR bytewr,NULL
 	
 	
 	;*****************************************************
 	; Fin Programa
-
+	;se cierran los ficheros
+	
+	invoke  CloseHandle,hFile
+	invoke  CloseHandle,hFileWrite
+	
+	
 	
 	;se libera la memoria dinamica
 	invoke  GlobalFree,hMem
