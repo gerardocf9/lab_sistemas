@@ -1,0 +1,32 @@
+%\documentclass[10pt]{article}
+
+\section*{Programa lectura.asm}
+
+El código del programa se encuentra en un único archivo llamado \textbf{lectura.asm}.
+Este programa funciona mediante una aplicación de consola usando la api de 32
+bits de Windows. Para la lectura del archivo se usan las funciones
+CreateFile en modo lectura, GetFileSize y ReadFile el tamaño. GetFileSize
+se utiliza para crear un bloque de memoria lo suficientemente grande
+para almacenar el archivo en memoria, mas el nuevo registro. Para escribir
+el archivo una vez modificado se utilizan lstrlen para poder saber la cantidad
+de bytes a escribir y finalmente se usa WriteFile.
+
+
+\lstinputlisting[language={[x86masm]Assembler}]{practica5/consola/lectura.asm}
+
+\section*{Funcionamiento del programa}
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{practica5/img/fig1}
+    \caption{Abriendo el archivo}
+\end{figure}
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{practica5/img/fig2}
+    \caption{Agregando un nuevo registro}
+\end{figure}
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{practica5/img/fig3}
+    \caption{Mostrando en pantalla el archivo resultante}
+\end{figure}

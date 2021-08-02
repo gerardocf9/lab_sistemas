@@ -1,3 +1,4 @@
+26540824,Jose Andres,84,50,60
 27085179,gerardo Campos,90,100,90
 12345678,Pedro Jose Perez Rodriguez,100,80,90 
 29348567,jesus,90,5,10
