@@ -164,10 +164,37 @@ Start:
 		Print_Text Cant_lineas
 		Get_Input CRLF,  pos; pedir la posicion
 
-		mov  edi, OFFSET pos
-		xor eax,eax ; limpiamos eax
-		mov eax, [edi]
-		and eax, 15 ;llevamos eax a numerico
+
+        ; CODIGO ANDRES
+
+
+        Invoke lstrlen, OFFSET pos  ; Guardamos la longitud del string en ECX
+        mov ecx, eax
+        dec ecx
+
+        mov edi, OFFSET pos
+        xor eax,eax
+
+        .WHILE ecx >= 0
+
+        mov bl, [edi + ecx]
+
+        .IF bl >= 30h && bl <= 39h
+
+        imul eax, 10
+        sub bl, 30h
+
+        movzx ebx, bl
+        add eax, ebx
+
+        .ENDIF
+
+        dec ecx
+
+        .ENDW
+
+        ; CODIGO ANDRES
+
 
     cmp eax,0
 	jg  segundo
