@@ -84,7 +84,7 @@ Start:
 	OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,0
 	mov     hFile,eax
 
-	;obtencion del tamaño de la fila para pedir memoria dinamica
+	;obtencion del tamanio de la fila para pedir memoria dinamica
 	invoke  GetFileSize,eax,0
 	mov     FileSize,eax
 	inc     eax
