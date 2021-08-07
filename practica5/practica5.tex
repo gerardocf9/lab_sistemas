@@ -12,6 +12,130 @@ el archivo una vez modificado se utilizan lstrlen para poder saber la cantidad
 de bytes a escribir y finalmente se usa WriteFile.
 
 
+El programa se puede dividir en los siguientes pasos:
+\begin{itemize}
+    \item Apertura y lectura del archivo.
+    \item Apertura del archivo en el que se va a escribir.
+    \item Conteo de lineas.
+    \item Pedir por pantalla los datos que se van a ingresar.
+    \item Creacion del nuevo elemento que se anexara al archivo.
+    \item Localizacion de la posicion en la que se escribira.
+    \item Escritura y cierre del fichero.
+\end{itemize}
+
+\subsection*{Apertura y lectura del archivo}
+
+    Para esto se pide por teclado el nombre del fichero a abrir, mediante un
+    macro \textbf{Get\_Input} el cual hace uso de las funciones \textbf{StdOut}
+    y \textbf{StdIn} para dar como salida un mensaje y leer por teclado.
+    Y se utilizan las funciones \textbf{CreateFile, GetFileSize, GlobalAlloc,
+    ReadFile} de la misma forma que en la \Cite{pract4} para abrir y almacenar
+    la informacion contenida en el archivo y \textbf{CloseHandle} para cerrarla.
+
+\subsection*{Apertura del archivo en el que se va a escribir}
+
+    Una vez tenida la informacion, se abre un nuevo fichero, en este caso en
+    modo escritura, para almacenar allí la informacion. Esto se logra con:
+
+    \begin{Verbatim}
+       "invoke  CreateFile,ADDR new_file ,GENERIC_WRITE,0,0,\
+                CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,0
+        mov     hFileWrite,eax"
+    \end{Verbatim}
+
+    De donde resalta el uso de un nuevo \comillas{handler} y los parametros
+    \comillas{ADDR new\_file}, \comillas{GENERIC\_WRITE} y \comillas{CREATE\_ALWAYS}
+    las cuales implican el nombre con el que se creara el archivo, el metodo de
+    escritura y la opcion de que, aunque el archivo ya exista, siempre se creara
+    desde 0.
+
+\subsection*{Conteo de lineas}
+
+    Para el calculo de lineas, se utiliza como contador el registro \textbf{ecx}
+    inicializado en 1, la direccion de la informacion en el registro \textbf{esi}
+    y se hace un ciclo de chequeo, en el que se recorren todos los caracteres
+    del archivo buscando el caracter de salto de linea \textbf{$\backslash$ n} o
+    el numero 10 por ascii. Cada vez que hay una coincidencia se incrementa en
+    1 el contador, ya que hay una nueva linea, de esta forma cada coincidencia
+    implicaria el comienzo de la 2da, 3ra, $\cdots$ , n-esima linea.
+
+    Una vez recorrido todo el archivo, se procede a agregar la linea adicional,
+    la nueva a agregar, y por esto se incrementa el contador nuevamente. Se
+    guarda el valor obtenido en la pila, mediante un push y se llama al
+    procedimiento NumbToStr para guardar el numero convertido en forma de string
+    y poder mostrarlo por pantalla cuando se requieran los valores a ingresar.
+
+    Este procedimiento se basa en la construccion del string mediante la obtencion
+    individual de cada digito. Esto se logra mediante divisiones sucesivas en-por
+    base 10. Primero se calcula la direccion del ultimo caracter posible al
+    sumar la memoria del puntero al string + la cantidad de digitos que se
+    pueden agregar, en este caso 10 digitos. Se agrega el caracter de terminacion,
+    \comillas{0}, como ultimo elemento y luego se hace un ciclo, mientras exista
+    algun digito (el resultado sea distinto de 0) se divide, \textbf{eax} entre
+    \textbf{ebx}, el resultado queda en \textbf{eax} y el residuo en \textbf{dl}
+    se guarda el residuo en la direccion correspondiente, esta se decrementa y se
+    repite el proceso. Finalmente, se devuelve en eax la direccion del primer
+    elemento del string resultante.
+
+
+\subsection*{Pedir por pantalla los datos que se van a ingresar}
+
+
+\subsection*{ Creacion del nuevo elemento que se anexara al archivo}
+    Una vez obtenidos los datos, hace falta juntarlos de forma eficiente y en el
+    formato indicato, esto se logra mediante la funcion de la api de windows
+    \comillas{\textbf{lstrcat}} esta toma como parametros 2 direcciones a strings
+    la primera es a la cual se anexará la segunda, de esta forma solo hace falta
+    llamarla tantas veces sea necesaria y con los parametros adecuados para
+    construir nuestro nuevo registro.
+
+\subsection*{Localizacion de la posicion en la que se escribira}
+
+    Para esto se utilizan los elementos guardados anteriormente, al hacer
+    \comillas{pop} se retornan los valores numericos de donde se va a insertar
+    el nuevo registro y cuantas lineas tiene el archivo. se hace una estructura
+    de decision anidada en la cual se evaluan 3 posibilidades:
+
+    \begin{itemize}
+        \item El elemento se agregara en la primera posicion.
+        \item El elemento se agregara en una posicion intermedia.
+        \item El elemento se agregara en la ultima posicion.
+    \end{itemize}
+
+    Si se anexara al inicio o al final es una decision trivial, simplemente se
+    estructura de esa forma la concatenacion y se envia al segmento de escritura
+    correspondiente. En el caso de que el elemento sea
+    en una posicion intermedia se utiliza un ciclo parecido al del conteo de lineas
+    con la unica modificacion de que al conseguirse una nueva linea se evalua si
+    es en esta linea en donde se anexara el registro creado anteriormente; si es
+    asi, se va al procedimiento de escritura, si no se continua el ciclo hasta
+    conseguir la linea deseada.
+
+\subsection*{ Escritura y cierre del fichero}
+
+    Siguiendo las ideas anteriores, se presentan 3 posibilidades de escritura:
+
+    \begin{itemize}
+        \item Primera linea:
+                se escribe 3 veces en el archivo:
+                \begin{itemize}
+                    \item Se escribe el nuevo registro.
+                    \item Se escribe el salto de linea.
+                    \item Se escribe el archivo leido.
+                \end{itemize}
+        \item Linea intermedia:
+
+
+        \item Ultima linea:
+            se escribe 3 veces en el archivo:
+            \begin{itemize}
+                \item Se escribe el archivo leido.
+                \item Se escribe el salto de linea.
+                \item Se escribe el nuevo registro.
+            \end{itemize}
+    \end{itemize}
+
+
 \lstinputlisting[language={[x86masm]Assembler}]{practica5/consola/lectura.asm}
 
 \section*{Funcionamiento del programa}
