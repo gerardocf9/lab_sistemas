@@ -1,6 +1,6 @@
 %\documentclass[10pt]{article}
 
-\section*{Programa lectura.asm}
+\section{Programa lectura.asm}
 
 El código del programa se encuentra en un único archivo llamado \textbf{lectura.asm}.
 Este programa funciona mediante una aplicación de consola usando la api de 32
@@ -210,7 +210,14 @@ variables especificas.
                     \item Se escribe el archivo leido.
                 \end{itemize}
         \item Linea intermedia:
-
+            Ocurre en cuatro pasos:
+            \begin{itemize}
+                    \item Se cuenta la cantidad de bytes a escribir de
+                        acuerdo a la linea que se desea ingresar.
+                    \item Se escribe esa cantidad bytes del archivo anterior.
+                    \item Se escribe el nuevo registro.
+                    \item Se escribe el resto del archivo.
+            \end{itemize}
 
         \item Ultima linea:
             se escribe 3 veces en el archivo:
