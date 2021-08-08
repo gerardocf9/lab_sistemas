@@ -77,8 +77,26 @@ El programa se puede dividir en los siguientes pasos:
     repite el proceso. Finalmente, se devuelve en eax la direccion del primer
     elemento del string resultante.
 
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+    \foreach \y in {1,...,5} {
+    \filldraw[fill=yellow!05!white] (0,5-\y) rectangle node {Linea \y\  $\dots$} (6,5-\y+1);
+    \filldraw[fill=blue!20!white] (6,5-\y) rectangle node {\textbackslash r} (7,5-\y+1);
+    \filldraw[fill=red!20!white] (7,5-\y) rectangle node {\textbackslash n} (8,5-\y+1);
+}
+\end{tikzpicture}
+\caption{Conteo de lineas}
+\end{figure}
 
 \subsection*{Pedir por pantalla los datos que se van a ingresar}
+Lo primero que se le pide al usuario es donde quiere ingresar el nuevo registro,
+se espera un numero en decimal, para esto el programa cuenta la cantidad de
+caracteres que son números del 0 al 9 y los pasa a un ciclo que convierte la
+cadena de caracteres en un entero mediante multiplicaciones consecutivas por
+10 y la suma de cada numero de la cadena. Finalmente se piden el resto de
+caracteres que son simplemente cadenas de caracteres que se guardan en sus
+variables especificas.
 
 
 \subsection*{ Creacion del nuevo elemento que se anexara al archivo}
@@ -88,6 +106,28 @@ El programa se puede dividir en los siguientes pasos:
     la primera es a la cual se anexará la segunda, de esta forma solo hace falta
     llamarla tantas veces sea necesaria y con los parametros adecuados para
     construir nuestro nuevo registro.
+
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+    \filldraw[blue!20!white] (0,0) rectangle (1,1);
+    \node at (0.5, 0.5) {ID};
+\foreach \x\y in {1/{,},2/nam,3/{,},4/N1}{
+    \node at (2*\x - 0.5,0.5) {$\dots$};
+    \filldraw[blue!20!white] (2*\x,0) rectangle (2*\x + 1,1);
+    \node at (2*\x + 0.5, 0.5) {\y};
+}
+
+    \foreach \x\y in {0/{,},1/{N2},2/{,},3/N3, 4/{\textbackslash r\textbackslash n}}{
+    \node at (2*\x - 0.5,-0.75) {$\dots$};
+    \filldraw[blue!20!white] (2*\x,-1.25) rectangle (2*\x + 1,-0.25);
+    \node at (2*\x + 0.5,-0.75) {\y};
+}
+\end{tikzpicture}
+\caption{Creando registro}
+\end{figure}
+
 
 \subsection*{Localizacion de la posicion en la que se escribira}
 
@@ -110,6 +150,52 @@ El programa se puede dividir en los siguientes pasos:
     es en esta linea en donde se anexara el registro creado anteriormente; si es
     asi, se va al procedimiento de escritura, si no se continua el ciclo hasta
     conseguir la linea deseada.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+
+\filldraw[fill=yellow!05!white] (0,1) rectangle node {Linea 1 $\dots$} (6,2);
+\filldraw[fill=blue!20!white] (6,1) rectangle node {\textbackslash r} (7,2);
+\filldraw[fill=red!20!white] (7,1) rectangle node {\textbackslash n} (8,2);
+
+
+\filldraw[fill=yellow!05!white] (0,0) rectangle node {Linea 2  $\dots$} (6,1);
+\filldraw[fill=blue!20!white] (6,0) rectangle node {\textbackslash r} (7,1);
+\filldraw[fill=red!20!white] (7,0) rectangle node {\textbackslash n} (8,1);
+
+
+\node at (4,-0.5) {$\vdots$};
+
+\filldraw[fill=yellow!05!white] (0,-2) rectangle node {Linea (k $-$ 1)  $\dots$} (6,-1);
+\filldraw[fill=blue!20!white] (6,-2) rectangle node {\textbackslash r} (7,-1);
+\filldraw[fill=red!20!white] (7,-2) rectangle node {\textbackslash n} (8,-1);
+
+\filldraw[fill=yellow!05!white] (0,-2) rectangle node {Linea (k $-$ 1)  $\dots$} (6,-1);
+\filldraw[fill=blue!20!white] (6,-2) rectangle node {\textbackslash r} (7,-1);
+\filldraw[fill=red!20!white] (7,-2) rectangle node {\textbackslash n} (8,-1);
+
+\filldraw[fill=yellow!05!white] (2,-3) rectangle node {Linea nueva  $\dots$} (8,-2);
+\filldraw[fill=blue!20!white] (8,-3) rectangle node {\textbackslash r} (9,-2);
+\filldraw[fill=red!20!white] (9,-3) rectangle node {\textbackslash n} (10,-2);
+
+%\draw[very thick, blue,->] (1.75,-2.5) -- (0.5,-2.5);
+
+\filldraw[fill=yellow!05!white] (0,-4) rectangle node {Linea (k + 1)  $\dots$} (6,-3);
+\filldraw[fill=blue!20!white] (6,-4) rectangle node {\textbackslash r} (7,-3);
+\filldraw[fill=red!20!white] (7,-4) rectangle node {\textbackslash n} (8,-3);
+
+\node at (4,-4.5) {$\vdots$};
+
+\filldraw[fill=yellow!05!white] (0,-6) rectangle node {Linea (k + 1)  $\dots$} (6,-5);
+\filldraw[fill=blue!20!white] (6,-6) rectangle node {\textbackslash r} (7,-5);
+\filldraw[fill=red!20!white] (7,-6) rectangle node {\textbackslash n} (8,-5);
+
+\end{tikzpicture}
+\caption{Colocando nuevo elemento en una posicion intermedia}
+\end{figure}
+
+
 
 \subsection*{ Escritura y cierre del fichero}
 
