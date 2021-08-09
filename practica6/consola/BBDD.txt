@@ -2,8 +2,6 @@
 21435,Pedro Jose Perez Rodriguez,100,80,90
 12143,prueba3,5,10
 32544,prueba 4,4,5,04
-
-48945,prueba 5,4,5,04
 97646,prueba 6,4,5,04
 8456457,prueba 7,4,5,04
 89458,prueba 8,4,5,04

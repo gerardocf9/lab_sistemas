@@ -30,6 +30,8 @@ StrToNumb PROTO :DWORD
 
 WritingLine PROTO :DWORD, :DWORD
 
+WritingLineFile PROTO :DWORD, :DWORD, :DWORD,:DWORD
+
 Main PROTO
 Print_Text Macro txt:REQ
 	Invoke StdOut,ADDR txt
@@ -251,60 +253,49 @@ Start:
 	
 	;eax contiene el lugar en el que se va a guardar, usamos un respaldo en edi
 	mov edi,eax
-
 	mov ecx, 1 ;inicializamos el contador en 1 posible linea
+	mov ebx,offset hDir_inicial
 	mov esi,  hMem ; vamos a trabajar con el archivo, por eso usamos el handler de memoria...
-	mov eax, 0 ; limpiamos eax, solo usaremos al (byte...)
-	mov ebx, 0; se usara de booleano
-	push ebx
-	cont_lineas3:
-		pop ebx ;ebx suele ser modificado en los syscall, entonces nos aseguramos mantenga ese valor
-		push ebx
-		.if ecx == edi &&  ebx!=1 ;se consiguio la linea que se va a eliminar 
-			;la que viene se eliminara y por eso se saltara , se volvera a comparar buscando linea+1 y esa sera la direccion de
-			;inicio de la que se va a eliminar
-			;
-			Invoke StdOut,ADDR par2
-			mov ebx,1
-			push ebx
-			inc edi ; asi se puede volver a comparar...
-		.endif
-		
-		.if ecx == edi &&  ebx==1 ;se consiguio la linea que se va a eliminar 
-			jmp post_insertion
-		.endif
+	mov [ebx], esi
+	
+	ciclo_muestreo3:
+		mov eax, 0 ; limpiamos eax, solo usaremos al (byte...)
 		mov al, [esi]
 
 		cmp eax, 10 ;compara buscando caracter de salto de linea '\r' '\n' con \n = 10 decimal A hex
-		jne n_linea_nueva3
+		jne no_nueva_linea3
+		
+		push eax ;guardamos el caracter que estaba 
+		push ecx;guardamos la posicion del contador
 		;Se llego al punto en el que se escribiria la nueva linea
+		;escribimos (n) 	
+		push esi
+		push edi
+		invoke WritingLineFile, hDir_inicial, esi,ecx,edi;devuelve la direccion final
+		pop edi
+		pop esi
+		;guarda la direccion final como nueva direccion inicial
+		mov ebx,offset hDir_inicial
+		mov [ebx], eax
+		;incrementamos, recuperamos el caracter  y continuamos	
+		pop ecx;recuperamos el valor del contador
 		inc ecx
-		cmp edi, ecx
-		je escritura
+		pop eax ;recuperamos el caracter, para seguir con el ciclo sin tener que modificar
 
-		n_linea_nueva3:
+		no_nueva_linea3:
 		cmp eax , 0 ; compara con el caracter de fin de archivo, end buffer...
-	je  fin_de_linea3
+	je  f_lineas3
 
 		inc esi
-	jmp cont_lineas3
+	jmp ciclo_muestreo3
 
-	fin_de_linea3:
-		jmp fin
-
+	f_lineas3:
 	
-	
-	post_insertion:
-	
-	
-	
-	
-	
-	invoke  StdOut,hMem
+	;se debe repetir la impresion una vez mas porque la ultima linra no tiene \n, tiene 0
+	invoke WritingLineFile, hDir_inicial, esi,ecx,edi;devuelve la direccion final
 	Print_Text CRLF ;salto de linea
 	Print_Text CRLF ;salto de linea
-	
-	
+	;incrementamos, recuperamos el caracter  y continuamos
 	
 	
 	
@@ -610,5 +601,30 @@ WritingLine proc uses esi edi ecx ebx dir_inicial:DWORD, dir_final:DWORD
 
 	Ret
 WritingLine endp
+WritingLineFile proc uses esi edi ecx ebx dir_inicial:DWORD, dir_final:DWORD, counter:DWORD, delete:DWORD
 
+
+	; eax tiene un caracter
+	;esi direccion del hmem+cant caracteres     sirve
+	; edi tiene el numero de linea a donde va
+	;ecx tiene el contador de cuantos lineas  van
+	mov esi,dir_final
+	;inc esi
+	push esi ; guardamos la direccion de hmem+cant_caracteres
+
+	mov ecx, dir_inicial; direccion inicial del archivo
+	sub esi, ecx ;en esi se tiene cuantos caracteres hay
+
+	;esi tiene cant bites a escribir
+	;ecx tiene dir de donde se escribira
+	mov eax, delete
+	mov ecx, counter
+	cmp eax,ecx
+	je no_file
+	invoke WriteFile,hFileWrite,dir_inicial,esi,ADDR bytewr,NULL;escritura del archivo
+	no_file:
+	mov eax, dir_final
+
+	Ret
+WritingLineFile endp
 End Start
