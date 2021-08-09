@@ -1,0 +1,105 @@
+%\documentclass[10pt]{article}
+
+\section{Programa lectura.asm}
+
+El código del programa se encuentra en un único archivo llamado \textbf{lectura.asm}.
+Este programa funciona mediante una aplicación de consola usando la api de 32
+bits de Windows. Para la lectura del archivo se usan las funciones
+CreateFile en modo lectura, GetFileSize y ReadFile el tamaño.
+Se utiliza una estructura de decisión conformada por \comillas{cmp} y \comillas{je}
+y se divide el programa en 2 grandes partes.GetFileSize
+se utiliza para crear un bloque de memoria lo suficientemente grande
+para almacenar el archivo en memoria, mas el nuevo registro. Para escribir
+el archivo una vez modificado se utilizan lstrlen para poder saber la cantidad
+de bytes a escribir y finalmente se usa WriteFile. Además se crearon
+procedimientos para facilitar la legibilidad y escritura, se crean strings,
+guardan y escriben de esta forma.
+
+
+El programa se puede dividir en dos grandes subprogramas y un previo común:
+
+Cabe resaltar que se utilizo la misma estructura que en \cite{pract5} con algunas
+modificaciones, creación de procedimientos con código reutilizable, y se le
+agrego:
+
+
+\begin{itemize}
+    \item Estructura de información y decisión para indicar cual subprograma hacer.
+
+    \item Encapsulación de la practica anteriormente nombrada para que su
+        ejecución sea controlada por la entrada del usuario.
+
+    \item Sub programa que se encarga de mostrar el archivo seleccionado indicando
+        el numero de linea correspondiente al registro a imprimir y la opción de
+        seleccionar y eliminar uno de estos.
+\end{itemize}
+
+
+\subsection*{Selección del programa a ejecutar}
+Para la elección de que programa se ejecutara, se muestra por pantalla la
+información: \comillas{Please type 1: to insert a new camp 2: to delete a existing line}
+y se utiliza el código de la practica 5 en forma de procedimiento para convertir
+la entrada en un entero, este numero se compara y se presentan 3 posibilidades:
+
+\begin{itemize}
+        \item Se ingreso 1. Se ejecuta la sección del código asociada, ya creado
+            en \cite{pract5} sin ninguna modificación.
+
+        \item Se ingreso 2. Se ejecuta la sección de código propia de esta
+            funcionalidad, se explicara posteriormente
+
+        \item se ingreso otro valor. Se ejecuta una sección de código adicional,
+            esta simplemente indica que el numero es una opción invalida y
+            termina la ejecución
+\end{itemize}
+
+\subsection*{Eliminación de una linea}
+Esta funcionalidad es la implementación solicitada, para esto se creo una sección
+de código especifica. Lo primero que se realiza es mostrar por pantalla el numero
+de linea-registro en el que se encuentre de la forma \comillas{(n)}, con \comillas{n}
+siendo la fila correspondiente del registro en el archivo.
+Esto se logra al separa el archivo en cada fin de linea, como se hizo anteriormente
+para contar la cantidad de lineas. se aprovecha este proceso de conteo para indicar
+en que linea se encuentra. para esto se utiliza un procedimiento  y se convierte
+un numero entero, el contador de lineas, en un string, se guarda en un buffer
+auxiliar y se imprime, entre la impresión de los símbolos \comillas{(} y
+\comillas{)} y luego se imprime la linea correspondiente, para esto se aprovecha
+que:
+$$ N_{bytes} = DIR_{fin} - DIR_{inicio}$$
+por lo tanto, solo hace falta el guardar la dirección inicial constantemente,
+primero es \comillas{hmem} cuando se consigue la siguiente linea, esta seria la
+direccion final de esa linea y la nueva direccion inicial.
+
+Usando esto se construyo
+un procedimiento el cual copia \comillas{n} char de un string de entrada a un buffer
+de salida; este es llamado dentro de un procedimiento de impresión al cual se le
+pasan las direcciones antes mencionadas, hace el calculo de la cantidad de caracteres
+crea la string y la imprime.
+
+
+Una vez terminada la impresión, se pide ingresar la linea correspondiente al
+registro a eliminar y se procede a esto. Este segmento de código es igual al hecho
+en la practica 5.
+
+Para \comillas{eliminar} la linea simplemente se deja de escribir en el archivo,
+para esto se toma ventaja de la impresión selectiva que se puede hacer con la
+función de la api de Windows \comillas{WriteFile}, de esta forma solo se elige
+que escribir enviando las direcciones de inicio de escritura y la cantidad de
+bytes a escribir adecuados. El procedimiento para esto es similar al explicado
+anteriormente solo que se envían a escribir en el archivo seleccionado  en vez
+de a mostrar por pantalla.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
