@@ -148,10 +148,10 @@ Start:
 	mov al,[ebx+32]
 	mov ah, [ebx+33]
 	mov frame_size, eax
-			
+	 mov eax, 0
+	mov eax,[ebx+40]
 	;obtencion del tamano del archivo   
-    lea esi, hMem[40]
-	lodsd ; carga una word (32) de esi a eax
+
 	mov data_size, eax ; Tamano en Bytes
 
     ;calculo del tamano del nuevo archivo
@@ -228,9 +228,12 @@ ciclo:
     mul ebx ; ebx*ecx = n * (m*frame_size)
     add esi, eax; esi tendria la direccion inicial+ el desplazamiento
     inc ecx ; aumentamos el contador, asi seria 0, m, 2m, ... , iteracionesm 
-
-    invoke WriteFile,hFileWrite,esi,frame_size,ADDR bytewr,NULL;escritura el el archivo
-
+    push ecx
+    push edi
+    mov ecx, frame_size
+    invoke WriteFile,hFileWrite,esi,ecx,ADDR bytewr,NULL;escritura el el archivo
+    pop edi
+    pop ecx
     cmp edi,ecx
     jg ciclo; iteraciones - contador, si iteraciones es mayor sigue
 
