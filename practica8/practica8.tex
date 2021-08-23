@@ -1,0 +1,82 @@
+\section{Programa p8.asm}
+
+Para esta practica se presentaron muchas dificultades, en su mayoria por las
+diferencias entre sistemas operativos trabajados. Para salvaguardar estos
+inconvenientes, no se pudo recurrir a una maquina virtual, dado que los equipos
+con los que se contaba, portatiles, no tienen recursos suficientes. De igual
+forma, los programas capaces de ejecutar codigo de windows en linux presentaron
+muchos inconvenientes y, particularmente la depuracion, resultaban muy complejos.
+Dado esto, se opto por hacer el programa funcional en linux y utilizar el
+\comillas{calling convention de windows} para que sea funcional en este sistema
+operativo; para poder realizar esto, se utilizo un codigo en c el cual hace un
+llamamado a un procedimiento en assembler, este es la conversion del programa de
+la practica 7, \Cite{pract7}, adaptado en forma de procedimiento y en lenguaje
+ensamblador \comillas{NASM}, el cual corre nativo en linux, ya que ensambla en la
+mayoria de plataformas, y por ende la
+depuracion se hace con facilidad, usando \comillas{GDB} por ejemplo, se opto por
+esta forma, ademas de por las limitaciones anteriormente nombradas, por los
+conocimientos previos de este \comillas{lenguaje}.
+
+El programa se desgloza en dos codigos, \comillas{\textbf{main.c}} y
+\comillas{\textbf{makeNewDataBlock.asm}}.
+
+\subsection*{main.c}
+Es el programa principal, se encarga de hacer el llamado a \ref{asm}. Esta
+diseñado de forma modular, posee 6 funciones ademas del main:
+
+\begin{itemize}
+    \item \textbf{\comillas{callMe}} la cual hace la llamada al codigo en assembler.
+    \item  \textbf{\comillas{getInt}} funcion para la lectura de un entero.
+    \item \textbf{\comillas{writeLittleEndian}} la cual se encarga de la escritura
+        en little endian.
+    \item \textbf{\comillas{readLittleEndian}}  que se encarfa de leer en little
+        endian.
+    \item \textbf{\comillas{strfind}} la cual busca y devuelve una cadena de
+        caracteres.
+    \item \textbf{\comillas{readFile}} que lee un archivo.
+    \item \textbf{\comillas{main}} es el main del programa y contiene la logica
+        del mismo.
+
+        \begin{itemize}
+            \item Lee el nombre de un archivo.
+            \item Abre el archivo ingresado, comprueba que cumpla todos los
+                parametros, lee el tamaño, chunksize y se separan los datos de
+                interes pertinentes al formato que se encuentran en el archivo,
+                de la misma forma que en la practica anterior.
+            \item Pide el valor de \comillas{m}.
+            \item Llama a la funcion en assembler,
+            \item Escribe la informacion en el nuevo archivo.
+        \end{itemize}
+\end{itemize}
+
+\subsection*{makeNewDataBlock.asm}\label{asm}
+
+Se encarga de modificar un buffer de entrada con respecto a los requerimientos
+dados, es decir el factor \comillas{m} de compresión que se requiera de forma
+similar a los hecho en la practica 7.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
