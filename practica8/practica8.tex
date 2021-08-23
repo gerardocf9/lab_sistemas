@@ -29,7 +29,7 @@ diseñado de forma modular, posee 6 funciones ademas del main:
     \item  \textbf{\comillas{getInt}} funcion para la lectura de un entero.
     \item \textbf{\comillas{writeLittleEndian}} la cual se encarga de la escritura
         en little endian.
-    \item \textbf{\comillas{readLittleEndian}}  que se encarfa de leer en little
+    \item \textbf{\comillas{readLittleEndian}}  que se encarga de leer en little
         endian.
     \item \textbf{\comillas{strfind}} la cual busca y devuelve una cadena de
         caracteres.
@@ -49,34 +49,31 @@ diseñado de forma modular, posee 6 funciones ademas del main:
         \end{itemize}
 \end{itemize}
 
-\subsection*{makeNewDataBlock.asm}\label{asm}
+\subsection*{newBlock.asm}\label{asm}
 
 Se encarga de modificar un buffer de entrada con respecto a los requerimientos
 dados, es decir el factor \comillas{m} de compresión que se requiera de forma
 similar a los hecho en la practica 7.
 
 
+\subsection*{Llamado de funciones de assembler desde C}
 
+Los lenguajes compilados depende de un \textbf{ABI} el cual especifica
+como serán llamadas las funciones en lenguaje maquina y usualmente
+este depende en mayor medida del sistema operativo, aunque tambien puede
+depender del compilador usado. Para los sistemas basados en x86 de 32 bits
+lo usual era pasar los parametros de las funciones por el stack ya que
+los registros en x86 eran bastante escasos pero en 64 bits tanto en linux,
+como en windows se utilizan algunos registros para pasar parametros a las
+funciones. El pasar valores por registro minimiza el uso de ram o cache, lo
+cual mejora el performance de los programas en las plataformas de 64 bits.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Se utilizo para esta actividad el \textbf{ABI} de 64 bits tanto de linux
+como de windows, sin embargo existen problemas con la version de ensamblador
+para windows con el 5to parametro de la función por alguna razón no esta
+pasando el parametro que deberia pasarse por el stack, si hace pop el programa
+tira un \textbf{segfault}. Se intento depurar el programa de diferentes
+formas pero ninguna fue fructifera, quizas es el compilador o algun problema
+aun desconocido. En el caso de aplicaciones de 32 bits de windows se complica un
+poco el llamado de funciones porque no existe un solo estandar sino que existen
+3, por se decidio no utilizar.
