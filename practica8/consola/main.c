@@ -143,7 +143,13 @@ int main(){
             int m = getInt();
         }
 
-        int newDataChunkSize = dataChunkSize/m;
+        // Hay que sumarle el residuo y assembly para contar con el ultimo bloque
+        int newDataChunkSize = (dataChunkSize/(blockAlign*m))*blockAlign;
+
+        if((dataChunkSize % (blockAlign*m) > blockAlign)){
+            newDataChunkSize += blockAlign;
+        }
+
         printf("the newDataChunkSize is %d\n", newDataChunkSize);
 
         int newFileSize = 12 + 8 + fmtChunkSize + 8 + newDataChunkSize;

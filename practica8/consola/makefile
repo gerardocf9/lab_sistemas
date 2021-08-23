@@ -1,10 +1,16 @@
-all: test
+all: test test-win
 
-test: main.c makeNewDataBlock.o
-	clang main.c makeNewDataBlock.o -o test
+test: main.c newBlock-linux.o
+	clang main.c newBlock-linux.o -o test
 
-makeNewDataBlock.o: makeNewDataBlock.asm
-	nasm -f elf64 makeNewDataBlock.asm
+test-win: main.c newBlock-win.obj
+	x86_64-w64-mingw32-gcc newBlock-win.obj main.c -o test-win
+
+newBlock-linux.o: newBlock-linux.asm
+	nasm -f elf64 newBlock-linux.asm
+
+newBlock-win.obj: newBlock-win.asm
+	nasm -f win64 newBlock-win.asm
 
 clear:
-	rm makeNewDataBlock.o test
+	rm newBlock-linux.o test
